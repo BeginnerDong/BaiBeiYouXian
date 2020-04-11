@@ -1,0 +1,10 @@
+
+
+/* 产品列表 */
+.productList{flex-wrap: wrap;align-items: flex-start;}
+.productList .item{width: 330rpx;height: 492rpx;margin-bottom: 30rpx;background: #fff;overflow: hidden;}
+.productList .item .pic{width: 100%;height: 300rpx;}
+.productList .item .pic image{width: 100%;height:100%; display: block;}
+.productList .item .infor{padding: 20rpx 16rpx;}
+.productList .item .tit{padding-bottom: 10rpx;}
+.fixState{font-size: 24rpx;width: 120rpx;height: 44rpx;text-align: center;line-height: 44rpx;border-radius: 0 0 26rpx 0;background: #eee;position: absolute;top: 0;left: 0;z-index: 1; color: #FFF;}
