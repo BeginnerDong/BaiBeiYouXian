@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view v-if="showAll">
 		
 		<view class="loginBj pr">
 			<image src="../../static/images/the-login-img.png" mode=""></image>
@@ -8,16 +8,16 @@
 		<view class="loginCont">
 			<view class="item flex mgb20">
 				<view class="input">
-					<input type="text" value="" placeholder="账号" placeholder-class="placeholder">
+					<input type="text"  v-model="submitData.login_name" placeholder="账号" placeholder-class="placeholder">
 				</view>
 			</view>
 			<view class="item flex mgb20">
 				<view class="input">
-					<input type="password" value="" placeholder="密码" placeholder-class="placeholder">
+					<input type="password" v-model="submitData.password" placeholder="密码" placeholder-class="placeholder">
 				</view>
 			</view>
 			
-			<view class="item submitbtn" style="padding: 0;border: 0;" @click="Router.navigateTo({route:{path:'/pages/storeOrder/storeOrder'}})">
+			<view class="item submitbtn" style="padding: 0;border: 0;" @click="submit">
 				<button class="Wbtn" type="submint">立即登录</button>
 			</view>
 		</view>
@@ -33,24 +33,55 @@
 		data() {
 			return {
 				Router:this.$Router,
-				is_show: false,
-				wx_info:{}
+				submitData:{
+					login_name:'',
+					password:''
+				},
+				showAll:false
 			}
 		},
-		onLoad() {
+		
+		onLoad(options) {
 			const self = this;
-			// self.$Utils.loadAll(['getMainData'], self);
+			if (uni.getStorageSync('staffToken')) {
+				uni.redirectTo({
+					url: '/pages/storeOrder/storeOrder'
+				})
+			}else{
+				self.showAll = true
+			}
 		},
+		
 		methods: {
 			
-			getMainData() {
+			submit() {
 				const self = this;
-				console.log('852369')
-				const postData = {};
-				postData.tokenFuncName = 'getProjectToken';
-				self.$apis.orderGet(postData, callback);
-			}
-		}
+			
+				const postData = {
+					login_name: self.submitData.login_name,
+					password:self.submitData.password
+				};
+				if (self.$Utils.checkComplete(self.submitData)) {
+					
+					const callback = (res) => {
+						if (res.solely_code == 100000) {
+							console.log(res);
+							uni.setStorageSync('staffToken', res.token);
+							uni.setStorageSync('staffInfo', res.info);
+							uni.redirectTo({
+								url: '/pages/storeOrder/storeOrder'
+							}) 
+						} else {
+							self.$Utils.showToast(res.msg,'none')
+						}
+					}
+					self.$apis.shopLogin(postData, callback);
+				} else {
+					self.$Utils.showToast('请补全登录信息', 'none')
+				};
+			},
+			
+		},
 	};
 </script>
 

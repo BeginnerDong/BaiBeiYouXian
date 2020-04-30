@@ -4,11 +4,11 @@
 			<view class="headbj"><image src="../../static/images/successfull-img.png" mode=""></image></view>
 			<view class="infor radius10 boxShaow whiteBj flexCenter">
 				<view class="photo">
-					<image src="../../static/images/about-img1.png" mode=""></image>
+					<view class="photo" style="overflow: hidden;"><open-data type="userAvatarUrl"></open-data></view>
 				</view>
 				<view>
-					<view class="fs15 ftw">月子巴巴</view>
-					<view class="fs14 mgt10">15689876759</view>
+					<view class="fs15 ftw"><open-data type="userNickName"></open-data></view>
+					<!-- <view class="fs14 mgt10">15689876759</view> -->
 				</view>
 				
 			</view>

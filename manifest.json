@@ -55,7 +55,7 @@
     /* 快应用特有相关 */
     "mp-weixin" : {
         /* 小程序特有相关 */
-        "appid" : "wx17e356eb62d1fbe5",
+        "appid" : "wx247b16e2e1b6a7f5",
         "setting" : {
             "urlCheck" : false,
             "es6" : true,
@@ -63,7 +63,11 @@
             "minified" : true
         },
         "usingComponents" : false,
-        "permission" : {}
+        "permission" : {
+            "scope.userLocation" : {
+                "desc" : "获取您的位置信息"
+            }
+        }
     },
     "h5" : {
         "title" : "玖兴超市",
@@ -73,6 +77,6 @@
         "router" : {
             "base" : "/wx/"
         },
-        "domain" : "https://www.local-scanner.com"
+        "domain" : "http://test.solelyfinance.com/wx"
     }
 }

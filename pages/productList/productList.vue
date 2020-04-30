@@ -4,29 +4,32 @@
 		<view class="">
 			<view class="">
 				<scroll-view class="scollNav color6 boxShaow" scroll-x >
-					<view class="tt" v-for="(item,index) in navData" :key="index">{{item}}</view>
+					<view @click="change(item.id)" class="tt" :class="searchItem.category_id==item.id?'on':''" v-for="(item,index) in labelData" :key="index">{{item.title}}</view>
 				</scroll-view>
 			</view>
 			<view class="mglr4 flexRowBetween productList mgt15">
-				<view class="item radius10 pr" v-for="(item,index) in productData" :key="index" @click="Router.navigateTo({route:{path:'/pages/productDetail/productDetail'}})">
-					<view class="fixState" style="background-color: #0d9f44;">预售中</view>
-					<view class="fixState" style="background-color: #9b9b9b;">已售罄</view>
-					<view class="fixState" style="background-color: #fb7445;">抢购中</view>
-					
-					<view class="pic"><image src="../../static/images/home-img.png" mode=""></image></view>
+				<view class="item radius10 pr" v-for="(item,index) in mainData" :key="index" :data-id="item.id"
+				@click="Router.navigateTo({route:{path:'/pages/productDetail/productDetail?id='+$event.currentTarget.dataset.id}})">
+					<view class="fixState" style="background-color: #fb7445;" v-if="item.is_Buying&&!item.is_noStock">抢购中</view>
+					<view class="fixState" style="background-color: #0d9f44;" v-if="item.is_notBuying&&!item.is_noStock">预售中</view>
+					<view class="fixState" style="background-color: #9b9b9b;" v-if="item.is_noStock">已售罄</view>
+			
+					<view class="pic">
+						<image :src="item.mainImg&&item.mainImg[0]?item.mainImg[0].url:''" mode=""></image>
+					</view>
 					<view class="infor">
-						<view class="tit avoidOverflow fs15">墨西哥牛油果8枚单果200g左右</view>
-						<view class="fs10 color6">提货时间：3月20日</view>
+						<view class="tit avoidOverflow fs15">{{item.title}}</view>
+						<view class="fs10 color6">提货时间：{{Utils.timeto(today,'md')}}</view>
 						<view class=" pdt10 flexRowBetween">
-							<view class="price fs16 ftw">88</view>
-							<view class="fs10 color6">预售时间：3月20日</view>
+							<view class="price fs16 ftw">{{item.price}}</view>
+							<view class="fs10 color6" v-if="item.is_notBuying&&!item.is_noStock">预售时间：{{Utils.timeto(item.end_time,'md')}}</view>
 						</view>
 					</view>
 				</view>
 			</view>
 			
 			<!-- 无数据 -->
-			<view class="nodata"><image src="../../static/images/nodata.png" mode=""></image></view>
+			<view class="nodata" v-if="mainData.length==0"><image src="../../static/images/nodata.png" mode=""></image></view>
 		</view>
 		
 	</view>
@@ -37,25 +40,100 @@
 		data() {
 			return {
 				Router:this.$Router,
+				Utils:this.$Utils,
 				is_show: false,
 				wx_info:{},
-				is_show:false,
-				navData:['全部','日用','水果','蔬菜','粮油','生鲜','蛋类'],
-				productData:[{},{},{},{},{}]
+				productData:[{},{},{},{},{}],
+				labelData:[],
+				searchItem:{
+					thirdapp_id:2,
+					
+				},
+				today:0,
+				mainData:[]
 			}
 		},
-		onLoad() {
+		
+		onLoad(options) {
 			const self = this;
-			// self.$Utils.loadAll(['getMainData'], self);
+			self.today = new Date().getTime()+uni.getStorageSync('user_info').thirdApp.pickup_time*86400000;
+			
+			self.searchItem.category_id = options.id
+			self.paginate = self.$Utils.cloneForm(self.$AssetsConfig.paginate);
+			self.$Utils.loadAll(['getMainData','getLabelData'], self);
 		},
+		
 		methods: {
-			getMainData() {
+			
+			change(id){
 				const self = this;
-				console.log('852369')
+				if(searchItem.category_id!=id){
+					self.searchItem.category_id = id;
+					self.getMainData(true)
+				}
+			},
+			
+			getLabelData() {
+				const self = this;
 				const postData = {};
-				postData.tokenFuncName = 'getProjectToken';
-				self.$apis.orderGet(postData, callback);
-			}
+				postData.searchItem = {
+					thirdapp_id: 2,
+					type:3
+				};
+				postData.order = {
+					listorder: 'desc'
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.labelData.push.apply(self.labelData, res.info.data);
+					}
+					self.$Utils.finishFunc('getLabelData');
+				};
+				self.$apis.labelGet(postData, callback);
+			},
+			
+			getMainData(isNew) {
+				const self = this;
+				var now = new Date().getTime();
+				if (isNew) {
+					self.mainData = [];
+					self.paginate = {
+						count: 0,
+						currentPage: 1,
+						pagesize: 10,
+						is_page: true,
+					}
+				};
+				const postData = {};
+				postData.paginate = self.$Utils.cloneForm(self.paginate);
+				postData.searchItem = self.$Utils.cloneForm(self.searchItem)
+				postData.searchItem.start_time = ['<', now]
+				postData.order = {
+					sale_count: 'desc'
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.mainData.push.apply(self.mainData, res.info.data);
+						for (var i = 0; i < self.mainData.length; i++) {
+							if (self.mainData[i].stock == 0 || self.mainData[i].sellout == 1) {
+								self.mainData[i].is_noStock = true
+							};
+							if (parseInt(self.mainData[i].end_time) > now) {
+								self.mainData[i].is_notBuying = true
+							} else {
+								self.mainData[i].is_Buying = true
+							}
+						}
+					} else {
+			
+					};
+					self.$Utils.finishFunc('getMainData');
+			
+				};
+				self.$apis.productGet(postData, callback);
+			},
+			
+			
 		}
 	};
 </script>

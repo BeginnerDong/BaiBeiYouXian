@@ -3,8 +3,70 @@ import config from "@/config/index.config.js";
 
 
 export default {
+	
+	getQrCode(param, callback) {
+		var allParams = {
+			url: 'Base/Qr/ProgramQrGet',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
 
-
+	messageGet(param, callback) {
+		var allParams = {
+			url: 'Common/Message/get',
+			type: 'post',
+			noToken: true,
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
+	hotSearchGet(param, callback) {
+		var allParams = {
+			url: 'Common/HotSearch/get',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
+	messageAdd(param, callback) {
+		var allParams = {
+			url: 'Common/Message/add',
+			type: 'post',
+			noToken: true,
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
+	messageUpdate(param, callback) {
+		var allParams = {
+			url: 'Common/Message/update',
+			type: 'post',
+			noToken: true,
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
 	WxJssdk(param, callback) {
 
 		var allParams = {
@@ -467,6 +529,30 @@ export default {
 	pay(param, callback) {
 		var allParams = {
 			url: 'Base/Pay/pay',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
+	logGet(param, callback) {
+		var allParams = {
+			url: 'Common/Log/get',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
+	logUpdate(param, callback) {
+		var allParams = {
+			url: 'Common/Log/update',
 			type: 'post',
 			data: param,
 			sCallback: function(data) {
