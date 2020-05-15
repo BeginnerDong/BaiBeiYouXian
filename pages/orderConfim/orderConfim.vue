@@ -63,7 +63,7 @@
 								<image class="arrowR" src="../../static/images/addressl-icon2.png" mode=""></image>
 							</view>
 						</view>
-						<view class="pdt15 red">{{self.addressData.city}}5公里范围内均可配送({{nearShopData[0].name}})</view>
+						<view class="pdt15 red">5公里范围内均可配送</view>
 					</view>
 				</view>
 			</view>
@@ -350,6 +350,11 @@
 						self.$Utils.showToast('请选择收货地址','none')
 						return
 					}
+					if(self.shop==''){
+						uni.setStorageSync('canClick', true);
+						self.$Utils.showToast('门店匹配错误','none')
+						return
+					}
 				};
 				var data = {
 					transport_type:self.curr,
@@ -409,7 +414,7 @@
 						var array = self.$Utils.getStorageArray('cartData');
 						for (var i = 0; i < orderList.length; i++) {
 							for (var j = 0; j < array.length; j++) {
-								if(orderList[i].product_id = array[j].id){
+								if(orderList[i].product_id == array[j].id){
 									self.$Utils.delStorageArray('cartData', orderList[i], 'id');
 								}
 							}

@@ -30,8 +30,8 @@
 								<view class="avoidOverflow fs13">{{item.orderItem&&item.orderItem[0]&&item.orderItem[0].snap_product
 							&&item.orderItem[0].snap_product?item.orderItem[0].snap_product.title:''}}</view>
 								<view class="B-price flexRowBetween">
-									<view class="price">{{item.price?item.price:''}}</view>
-									<view class="fs13">×{{item.price?item.count:''}}</view>
+									<view class="price">{{item.unit_price?item.unit_price:''}}</view>
+									<view class="fs13">×{{item.count?item.count:''}}</view>
 								</view>
 							</view>
 						</view>

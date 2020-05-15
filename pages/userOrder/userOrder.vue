@@ -86,7 +86,7 @@
 							</view>
 						</view>
 						<view class="underBtn flexEnd mgt15" v-if="item.transport_status==1">
-							<view class="Bbtn">确认收货</view>
+							<view class="Bbtn" @click="orderUpdate(index)">确认收货</view>
 						</view>
 					</view>
 				</view>
@@ -141,7 +141,41 @@
 			self.getMainData(true)
 		},
 		
+		onReachBottom() {
+			console.log('onReachBottom')
+			const self = this;
+			if (!self.isLoadAll && uni.getStorageSync('loadAllArray')) {
+				self.paginate.currentPage++;
+				self.getMainData()
+			};
+		},
+		
 		methods: {
+			
+			orderUpdate(index) {
+				const self = this;
+				uni.setStorageSync('canClick', false);
+				const postData = {};
+				postData.tokenFuncName = 'getProjectToken';
+				postData.data = {
+					transport_status:2,
+				};
+				postData.searchItem = {
+					id:self.mainData[index].id,
+				};
+				const callback = (data) => {
+					uni.setStorageSync('canClick', true);
+					if (data && data.solely_code == 100000) {
+						self.$Utils.showToast('操作成功','none');
+						setTimeout(function() {
+							self.getMainData(true)
+						}, 1000);
+					} else {
+						self.$Utils.showToast(data.msg,'none')
+					}
+				};
+				self.$apis.orderUpdate(postData, callback);
+			 },
 			
 			getMainData(isNew) {
 				const self = this;

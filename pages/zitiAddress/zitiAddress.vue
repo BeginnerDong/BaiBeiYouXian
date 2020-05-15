@@ -11,7 +11,7 @@
 			</view>
 			<view class="rr flexEnd">
 				<view class="seltBox" @click="setDefault(index)">
-					<image class="icon" :src="defaultNo!=''&&defaultNo == item.passage1?'../../static/images/shoppimg-icon.png':'../../static/images/shoppimg-icon1.png'" mode=""></image>
+					<image class="icon" :src="defaultNo!=''&&defaultNo == item.user_no?'../../static/images/shoppimg-icon.png':'../../static/images/shoppimg-icon1.png'" mode=""></image>
 				</view>
 			</view>
 		</view>
@@ -33,8 +33,8 @@
 		onLoad() {
 			const self = this;
 			self.paginate = self.$Utils.cloneForm(self.$AssetsConfig.paginate);
-			self.defaultNo = uni.getStorageSync('user_info').info.passage1;
-			self.$Utils.loadAll(['getMainData'], self);
+			
+			self.$Utils.loadAll(['getMainData','getUserInfoData'], self);
 		},
 
 		
@@ -51,6 +51,23 @@
 
 		methods: {
 			
+			getUserInfoData() {
+				const self = this;
+				const postData = {};
+				postData.tokenFuncName = 'getProjectToken';
+				postData.searchItem = {
+					thirdapp_id:2
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.userInfoData = res.info.data[0]
+						self.defaultNo = self.userInfoData.passage1
+					};
+					self.$Utils.finishFunc('getUserInfoData');	
+				};
+				self.$apis.userInfoGet(postData, callback);
+			},
+			
 			setDefault(index) {
 				const self = this;
 				const postData = {};
@@ -63,7 +80,7 @@
 				};
 				const callback = (data) => {				
 					if (data.solely_code == 100000) {					
-						self.defaultNo = self.mainData[index].passage1
+						self.defaultNo = self.mainData[index].user_no
 						uni.setStorageSync('choosedShopData', self.mainData[index]);
 						console.log('choosedIndex', self.choosedIndex);
 						uni.navigateBack({
@@ -100,6 +117,7 @@
 				const callback = (res) => {
 					if (res.info.data.length > 0) {
 						self.mainData.push.apply(self.mainData,res.info.data)
+						
 					};
 					self.$Utils.finishFunc('getMainData');	
 				};
