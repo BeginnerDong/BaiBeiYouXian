@@ -15,6 +15,13 @@
 			}
 		},
 		{
+			"path": "pages/goodsList/goodsList",
+			"style": {
+				"navigationBarTitleText": "商品",
+				"onReachBottomDistance":100
+			}
+		},
+		{
 			"path": "pages/productDetail/productDetail",
 			"style": {
 				"navigationBarTitleText": "详情",

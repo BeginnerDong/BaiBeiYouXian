@@ -61,10 +61,14 @@
 				</view>
 				<view class="infor">
 					<view class="tit avoidOverflow fs15">{{item.title}}</view>
-					<view class="fs10 color6">提货时间：{{Utils.timeto(today,'md')}}</view>
+					<view class="fs11 color6">销量：525</view>
+					<view class="fs11 time color6">提货时间：{{Utils.timeto(today,'md')}}</view>
 					<view class=" pdt10 flexRowBetween">
-						<view class="price fs16 ftw">{{item.price}}</view>
-						<view class="fs10 color6" v-if="item.is_notBuying&&!item.is_noStock">预售时间：{{Utils.timeto(item.end_time,'md')}}</view>
+						<view class="flex">
+							<view class="price fs16 ftw">{{item.price}}</view>
+							<view class="fs10 color6" v-if="item.is_notBuying&&!item.is_noStock">预售时间：{{Utils.timeto(item.end_time,'md')}}</view>
+						</view>
+						<view class="carIcon"><image src="../../static/images/icon-01.png" mode=""></image></view>
 					</view>
 				</view>
 			</view>

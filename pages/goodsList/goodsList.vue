@@ -2,19 +2,6 @@
 	<view>
 		
 		<view class="">
-			<view class="whiteBj">
-				<scroll-view class="scollNav color6 boxShaow" scroll-x >
-					<view @click="change(item.id)" class="tt" :class="searchItem.category_id==item.id?'on':''" v-for="(item,index) in labelData" :key="index">{{item.title}}</view>
-				</scroll-view>
-			</view>
-			
-			<view class="indHome flexRowBetween whiteBj pdt15 fs13">
-				<view class="item mgb15" v-for="(item,index) in typeData" @click="Router.navigateTo({route:{path:'/pages/goodsList/goodsList'}})">
-					<image :src="item.iconUrl"></image>
-					<view class="tit">{{item.title}}</view>
-				</view>
-				
-			</view>
 			
 			<view class="mglr4 flexRowBetween productList mgt15">
 				<view class="item radius10 pr" v-for="(item,index) in mainData" :key="index" :data-id="item.id"
@@ -56,23 +43,12 @@
 				Utils:this.$Utils,
 				is_show: false,
 				wx_info:{},
-				productData:[{},{},{},{},{}],
 				labelData:[],
 				searchItem:{
 					thirdapp_id:2,
 				},
 				today:0,
-				mainData:[],
-				typeData:[
-					{iconUrl:'../../static/images/icon-03.png',title:'苹果'},
-					{iconUrl:'../../static/images/icon-04.png',title:'香蕉'},
-					{iconUrl:'../../static/images/icon-05.png',title:'樱桃'},
-					{iconUrl:'../../static/images/icon-06.png',title:'石榴'},
-					{iconUrl:'../../static/images/icon-07.png',title:'火龙果'},
-					{iconUrl:'../../static/images/icon-08.png',title:'迷糊桃'},
-					{iconUrl:'../../static/images/icon-09.png',title:'菠萝'},
-					{iconUrl:'../../static/images/icon-10.png',title:'水蜜桃'}
-				]
+				mainData:[]
 			}
 		},
 		
@@ -164,30 +140,5 @@
 	@import "../../assets/style/productList.css";
 	
 	page{background-color: #F5F5F5;}
-	.scollNav{white-space: nowrap;}
-	.scollNav .tt{display: inline-block;margin:0 30rpx;height: 80rpx;line-height: 80rpx;}
-	.scollNav .tt.on{color: #FB7445;position: relative;}
-	.scollNav .tt.on::after{content: ""; width: 40rpx; height: 6rpx;background: #fb7445; position: absolute; bottom: 0;left: 50%;transform: translateX(-50%);}
-	
-	
-	/* 分类导航 */
-	.indHome {
-		flex-wrap: wrap;
-	}
-	
-	.indHome .item {
-		width: 25%;
-		text-align: center;
-		color: #222;
-		display: flex;
-		flex-direction: column;
-		line-height: 36rpx;
-	}
-	
-	.indHome .item image {
-		width: 68rpx;
-		height: 68rpx;
-		margin: 0 auto 20rpx auto;
-	}
 	
 </style>
