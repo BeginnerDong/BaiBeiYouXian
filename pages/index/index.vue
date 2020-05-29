@@ -50,25 +50,25 @@
 		</view>
 
 		<view class="mglr4 flexRowBetween productList mgt15">
-			<view class="item radius10 pr" v-for="(item,index) in mainData" :key="index" :data-id="item.id"
-			 @click="Router.navigateTo({route:{path:'/pages/productDetail/productDetail?id='+$event.currentTarget.dataset.id}})">
+			<view class="item radius10 pr" v-for="(item,index) in mainData" :key="index" >
 				<view class="fixState" style="background-color: #fb7445;" v-if="item.is_Buying&&!item.is_noStock">抢购中</view>
 				<view class="fixState" style="background-color: #0d9f44;" v-if="item.is_notBuying&&!item.is_noStock">预售中</view>
 				<view class="fixState" style="background-color: #9b9b9b;" v-if="item.is_noStock">已售罄</view>
 
-				<view class="pic">
+				<view class="pic" :data-id="item.id"
+			 @click="Router.navigateTo({route:{path:'/pages/productDetail/productDetail?id='+$event.currentTarget.dataset.id}})">
 					<image :src="item.mainImg&&item.mainImg[0]?item.mainImg[0].url:''" mode=""></image>
 				</view>
 				<view class="infor">
 					<view class="tit avoidOverflow fs15">{{item.title}}</view>
-					<view class="fs11 color6">销量：525</view>
+					<view class="fs11 color6">销量：{{item.sale_count}}</view>
 					<view class="fs11 time color6">提货时间：{{Utils.timeto(today,'md')}}</view>
 					<view class=" pdt10 flexRowBetween">
 						<view class="flex">
 							<view class="price fs16 ftw">{{item.price}}</view>
 							<view class="fs10 color6" v-if="item.is_notBuying&&!item.is_noStock">预售时间：{{Utils.timeto(item.end_time,'md')}}</view>
 						</view>
-						<view class="carIcon"><image src="../../static/images/icon-01.png" mode=""></image></view>
+						<view class="carIcon" @click="addCar(index)"><image src="../../static/images/icon-01.png" mode=""></image></view>
 					</view>
 				</view>
 			</view>
@@ -151,6 +151,25 @@
 		},
 
 		methods: {
+			
+			addCar(index) {
+				const self = this;
+				var array = self.$Utils.getStorageArray('cartData');
+				for (var i = 0; i < array.length; i++) {
+					if (array[i].id == self.mainData[index].id) {
+						var target = array[i]
+					}
+				}
+				if (target) {
+					target.count = target.count + 1
+				} else {
+					var target = self.mainData[index];
+					target.count = 1;
+					target.isSelect = true;
+				}
+				self.$Utils.showToast('加入成功', 'none');
+				self.$Utils.setStorageArray('cartData', target, 'id', 999);
+			},
 			
 			getUserInfoData() {
 				const self = this;

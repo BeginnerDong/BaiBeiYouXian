@@ -147,7 +147,7 @@
 			const self = this;
 			if (ops.from === 'button') {
 				return {
-					title: self.mainData.title,
+					title: self.mainData.title+' '+self.mainData.price+'元',
 					path: '/pages/productDetail/productDetail?id=' + self.mainData.id, //点击分享的图片进到哪一个页面
 					imageUrl: self.mainData.mainImg[0] ? self.mainData.mainImg[0].url : '',
 					success: function(res) {
@@ -162,7 +162,7 @@
 				console.log(ops.target)
 			} else {
 				return {
-					title: self.mainData.title,
+					title: self.mainData.title+' '+self.mainData.price+'元'	,
 					path: '/pages/productDetail/productDetail?id=' + self.mainData.id, //点击分享的图片进到哪一个页面
 					imageUrl: self.mainData.mainImg[0] ? self.mainData.mainImg[0].url : '',
 					success: function(res) {
