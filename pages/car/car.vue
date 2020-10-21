@@ -228,6 +228,7 @@
 					};
 				};
 				console.log(self.totalPrice)
+				self.totalPrice = parseFloat(self.totalPrice).toFixed(2)
 			},
 			
 			

@@ -343,7 +343,12 @@
 						uni.setStorageSync('canClick', true);
 						self.$Utils.showToast('请填写收货人信息','none')
 						return
-					}
+					};
+					if (self.orderInfo.phone.trim().length != 11 || !/^1[3|4|5|6|7|8|9]\d{9}$/.test(self.orderInfo.phone)) {
+						uni.setStorageSync('canClick', true);
+						self.$Utils.showToast('请输入真实有效的手机号', 'none', 1000)
+						return;
+					};
 				}else{
 					if(JSON.stringify(self.addressData) == '{}'){
 						uni.setStorageSync('canClick', true);
@@ -401,7 +406,7 @@
 					postData.data.name = self.orderInfo.name;
 					postData.data.phone = self.orderInfo.phone;
 					postData.data.shop_no = self.shopData.user_no;
-					postData.data.pickup_time = self.today
+					postData.data.pickup_time = self.today/1000
 				};
 				if(self.curr==2&&self.deliver>0){
 					postData.data.delivery_fee = self.deliver

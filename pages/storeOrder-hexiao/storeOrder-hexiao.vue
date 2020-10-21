@@ -17,7 +17,7 @@
 							<view class="avoidOverflow2 fs13">{{mainData.orderItem&&mainData.orderItem[0]&&mainData.orderItem[0].snap_product&&
 						mainData.orderItem[0].snap_product?mainData.orderItem[0].snap_product.title:''}}</view>
 							<view class="B-price flexRowBetween">
-								<view class="price">{{mainData.price}}</view>
+								<view class="price">{{mainData.orderItem[0].snap_product.price}}</view>
 								<view class="fs13">×{{mainData.count}}</view>
 							</view>
 						</view>

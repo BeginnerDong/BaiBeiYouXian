@@ -10,7 +10,7 @@
 			<view class="item flexRowBetween pdtb15 borderB1">
 				<view class="ll">手机号</view>
 				<view class="rr fs13" >
-					<input type="number" v-model="submitData.phone" placeholder="请输入手机号" placeholder-class="placeholder">
+					<input type="number" maxlength="11" v-model="submitData.phone" placeholder="请输入手机号" placeholder-class="placeholder">
 				</view>
 			</view>	
 			<view class="item flexRowBetween pdtb15 borderB1">
@@ -314,7 +314,11 @@
 				console.log('self.data.sForm', self.submitData)
 				console.log('pass', pass)
 				if (pass) {
-					
+					if (self.submitData.phone.trim().length != 11 || !/^1[3|4|5|6|7|8|9]\d{9}$/.test(self.submitData.phone)) {
+						uni.setStorageSync('canClick', true);
+						self.$Utils.showToast('请输入真实有效的手机号', 'none', 1000)
+						return;
+					};
 					if (self.id) {
 
 						self.addressUpdate();
